@@ -1,25 +1,25 @@
 `include "../network_params.h"module window_selector(
   input clock,
   input reset,
-  input [`BUFFER_OUT_VECTOR_BITWIDTH:0] buffer_vector,
-  input [`X_COORD_BITWIDTH:0] x,
-  input [`Y_COORD_BITWIDTH:0] y,
-  output reg[`CAMERA_PIXEL_BITWIDTH:0] value_out
+  input [`BUFFER_OUT_VECTOR_BITWIDTH:0] buffer_vector,//7055
+  input [`X_COORD_BITWIDTH:0] x,//4
+  input [`Y_COORD_BITWIDTH:0] y,//4
+  output reg[`CAMERA_PIXEL_BITWIDTH:0] value_out//8
 );
 
 // wire declarations
-wire [`CAMERA_PIXEL_BITWIDTH:0] buffer_wire [`BUFFER_BW:0][`BUFFER_BH:0];
+  wire [`CAMERA_PIXEL_BITWIDTH:0] buffer_wire [`BUFFER_BW:0][`BUFFER_BH:0];//8,27,27
 
 // reg declarations
-reg[`CAMERA_PIXEL_BITWIDTH:0] width_selector_wire [`BUFFER_BH:0];
+  reg[`CAMERA_PIXEL_BITWIDTH:0] width_selector_wire [`BUFFER_BH:0];//8,27
 
 genvar j;
 genvar i;
 generate 
-for (j=0; j<`BUFFER_H; j=j+1) begin : buffer_height_loop
-  for(i=0; i<`BUFFER_W; i=i+1) begin : buffer_width_loop
+for (j=0; j<`BUFFER_H; j=j+1) begin : buffer_height_loop//28
+  for(i=0; i<`BUFFER_W; i=i+1) begin : buffer_width_loop//28
     assign buffer_wire[i][j] = buffer_vector[
-    (`CAMERA_PIXEL_WIDTH*i)+(`BUFFER_W*`CAMERA_PIXEL_WIDTH*j) +`CAMERA_PIXEL_BITWIDTH:
+      (`CAMERA_PIXEL_WIDTH*i)+(`BUFFER_W*`CAMERA_PIXEL_WIDTH*j) +`CAMERA_PIXEL_BITWIDTH://9,28,9,8
     (`CAMERA_PIXEL_WIDTH*i)+(`BUFFER_W*`CAMERA_PIXEL_WIDTH*j)
     ];  
   end // for i
@@ -33,7 +33,7 @@ generate
 for (m=0; m<`BUFFER_H; m=m+1) begin : width_selector
   always@(*) begin
     case(x)
-      `X_COORD_WIDTH'd0: width_selector_wire[m] = buffer_wire[0][m];
+      `X_COORD_WIDTH'd0: width_selector_wire[m] = buffer_wire[0][m];//5
       `X_COORD_WIDTH'd1: width_selector_wire[m] = buffer_wire[1][m];
       `X_COORD_WIDTH'd2: width_selector_wire[m] = buffer_wire[2][m];
       `X_COORD_WIDTH'd3: width_selector_wire[m] = buffer_wire[3][m];
@@ -61,14 +61,14 @@ for (m=0; m<`BUFFER_H; m=m+1) begin : width_selector
       `X_COORD_WIDTH'd25: width_selector_wire[m] = buffer_wire[25][m];
       `X_COORD_WIDTH'd26: width_selector_wire[m] = buffer_wire[26][m];
       `X_COORD_WIDTH'd27: width_selector_wire[m] = buffer_wire[27][m];
-      default: width_selector_wire[m] = `CAMERA_PIXEL_WIDTH'd0;    endcase
+      default: width_selector_wire[m] = `CAMERA_PIXEL_WIDTH'd0;    endcase//9
   end //always
 end //for
 endgenerate
 
 always@(*) begin
   case(y)
-    `Y_COORD_WIDTH'd0: value_out = width_selector_wire[0];
+    `Y_COORD_WIDTH'd0: value_out = width_selector_wire[0];//5
     `Y_COORD_WIDTH'd1: value_out = width_selector_wire[1];
     `Y_COORD_WIDTH'd2: value_out = width_selector_wire[2];
     `Y_COORD_WIDTH'd3: value_out = width_selector_wire[3];
