@@ -6,11 +6,11 @@ module window_ctrl (
 
   // x/y coordinates of the buffer, will be constants to start but may
   // eventually change to look at different parts of the image
-  input [`SCREEN_X_BITWIDTH:0] buffer_x_pos,
-  input [`SCREEN_Y_BITWIDTH:0] buffer_y_pos,
+  input [`SCREEN_X_BITWIDTH:0] buffer_x_pos,     //9
+  input [`SCREEN_Y_BITWIDTH:0] buffer_y_pos,     //9 
 
   // video stream in
-  input [`SCREEN_X_BITWIDTH:0] screen_x, // the x coordinate of the current pixel input
+  input [`SCREEN_X_BITWIDTH:0] screen_x, // the x coordinate of the current pixel input   
   input [`SCREEN_Y_BITWIDTH:0] screen_y, // the y coordinate of the current pixel input
   // input [`CAMERA_PIXEL_BITWIDTH:0] pixel_in,
 
@@ -34,9 +34,9 @@ always@(posedge clock or negedge reset) begin
   if(reset == 1'b0) begin
     shift_left <= 1'd0;
   end else if( screen_x >= buffer_x_pos &&
-               screen_x < buffer_x_pos + `SCREEN_X_WIDTH'd`BUFFER_W &&
+               screen_x < buffer_x_pos + `SCREEN_X_WIDTH'd`BUFFER_W &&    //10,28
 					screen_y >= buffer_y_pos &&
-               screen_y < buffer_y_pos + `SCREEN_Y_WIDTH'd`BUFFER_H
+               screen_y < buffer_y_pos + `SCREEN_Y_WIDTH'd`BUFFER_H       //10,28
 					)
     shift_left <= 1'd1;
   else 
