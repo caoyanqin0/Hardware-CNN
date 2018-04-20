@@ -1,15 +1,15 @@
 `include "../network_params.h"
 module mult_adder(
       input     clock, 
-		  input     reset, 
-		  input [`MULT_ADDER_IN_BITWIDTH:0]  in,
-		  input [`MULT_ADDER_IN_BITWIDTH:0]  kernal,
-		  input [`CONV_ADD_BITWIDTH:0] bias,
-		  output [`CONV_ADD_BITWIDTH:0] out	
+      input     reset, 
+      input [`MULT_ADDER_IN_BITWIDTH:0]  in,//575
+      input [`MULT_ADDER_IN_BITWIDTH:0]  kernal,
+      input [`CONV_ADD_BITWIDTH:0] bias,//23
+      output [`CONV_ADD_BITWIDTH:0] out	
 		  );
 
 // wire declarations
-wire [`CONV_PRODUCT_BITWIDTH:0] in_add_vector_wire [`MA_TREE_SIZE-1:0];
+wire [`CONV_PRODUCT_BITWIDTH:0] in_add_vector_wire [`MA_TREE_SIZE-1:0];//17,64
 wire [`CONV_ADD_BITWIDTH:0] adder_tree_wire [((`MA_TREE_SIZE*2)-1)-1:0];
 wire [(`MA_TREE_SIZE*2)-1-1:0]carry_wire ;  
 
@@ -25,7 +25,7 @@ for(i = 0; i < `MA_TREE_SIZE; i=i+1) begin : connect_mul
    mult_adder_mult ma_mult_inst(
     .clock(clock),
     .reset(reset),
-    .operand_a(in[`CONV_MULT_WIDTH*(i+1)-1:i*`CONV_MULT_WIDTH]),
+    .operand_a(in[`CONV_MULT_WIDTH*(i+1)-1:i*`CONV_MULT_WIDTH]),//9
     .operand_b(kernal[`CONV_MULT_WIDTH*(i+1)-1:i*`CONV_MULT_WIDTH]),
     .out(in_add_vector_wire[i])
 			     ); 
@@ -42,7 +42,7 @@ for(i = 0; i < `MA_TREE_SIZE; i=i+1) begin : connect_in_vector
     // assign adder_tree_wire[i+`MA_TREE_SIZE-1][`CONV_PRODUCT_BITWIDTH:0] = in[(`CONV_PRODUCT_WIDTH*i)+`CONV_PRODUCT_BITWIDTH:`CONV_PRODUCT_WIDTH*i];
 	 assign adder_tree_wire[i+`MA_TREE_SIZE-1][`CONV_PRODUCT_BITWIDTH:0] = in_add_vector_wire[i];
     // loop over msb and assign sign bit here
-    for(pad_count=0; pad_count<`MULT_PAD_WIDTH; pad_count=pad_count+1) begin : sign_bit_extention_loop
+    for(pad_count=0; pad_count<`MULT_PAD_WIDTH; pad_count=pad_count+1) begin : sign_bit_extention_loop//6
       //assign adder_tree_wire[i+`MA_TREE_SIZE-1][`CONV_PRODUCT_WIDTH+pad_count] = in[(`CONV_PRODUCT_WIDTH*i)+`CONV_PRODUCT_BITWIDTH];
 		assign adder_tree_wire[i+`MA_TREE_SIZE-1][`CONV_PRODUCT_WIDTH+pad_count] = in_add_vector_wire[i][`CONV_PRODUCT_BITWIDTH];
     end // pad count 
@@ -73,9 +73,9 @@ endmodule // mult_adder
 module mult_adder_mult(
   input clock,
   input reset,
-  input signed [`CONV_MULT_BITWIDTH:0] operand_a,
+  input signed [`CONV_MULT_BITWIDTH:0] operand_a,//8
   input signed [`CONV_MULT_BITWIDTH:0] operand_b,
-  output [`CONV_PRODUCT_BITWIDTH:0] out 
+  output [`CONV_PRODUCT_BITWIDTH:0] out //17
 );
    reg signed[`CONV_PRODUCT_BITWIDTH:0]    product;
    
@@ -92,7 +92,7 @@ endmodule
 module mult_adder_add(
   input clock,
   input reset,
-  input [`CONV_ADD_BITWIDTH:0] operand_a,
+  input [`CONV_ADD_BITWIDTH:0] operand_a,//23
   input [`CONV_ADD_BITWIDTH:0] operand_b,
   input c_a, // overflow or carry indicators
   input c_b,
@@ -106,7 +106,7 @@ module mult_adder_add(
    
    always@(posedge clock or negedge reset) begin
       if(reset == 1'b0) 
-	      sum <= {1'b0,`CONV_ADD_WIDTH'd0};
+	      sum <= {1'b0,`CONV_ADD_WIDTH'd0};//24
       else  
 	      sum <= operand_a + operand_b;
    end // always
