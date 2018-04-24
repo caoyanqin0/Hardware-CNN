@@ -4,8 +4,8 @@ module mult_adder_ctrl(
   input reset,
   
   input start,
-  output [`X_COORD_BITWIDTH:0] x_coord,
-  output [`Y_COORD_BITWIDTH:0] y_coord,
+  output [`X_COORD_BITWIDTH:0] x_coord, //4
+  output [`Y_COORD_BITWIDTH:0] y_coord,//4
 
   output pixel_rdy // indicates valid data at end of tree/pipeline
 );
@@ -14,7 +14,7 @@ module mult_adder_ctrl(
 
 // reg declarations
 reg buffer_rdy;
-reg rdy_shift_reg [`RDY_SHIFT_REG_SIZE-1:0];
+reg rdy_shift_reg [`RDY_SHIFT_REG_SIZE-1:0];//8
 reg [`X_COORD_BITWIDTH:0] x_counter;
 reg [`Y_COORD_BITWIDTH:0] y_counter;
 
@@ -33,8 +33,8 @@ always@(posedge clock or negedge reset) begin
     if(start) begin 
       buffer_rdy <= 1'b1; 
 		                                         // extra - 1 to prevent counter overflow from being latched
-    end else if (x_counter == `X_COORD_MAX - 1 - 1 &
-                 y_counter == `Y_COORD_MAX - 1) begin
+    end else if (x_counter == `X_COORD_MAX - 1 - 1 &  //22
+		 y_counter == `Y_COORD_MAX - 1) begin  //22
       buffer_rdy <= 1'b0;
     end else begin
       buffer_rdy <= buffer_rdy;
@@ -45,8 +45,8 @@ end // always
 // x and y counters for window selectors
 always@(posedge clock or negedge reset) begin
   if (reset == 1'b0) begin
-    x_counter <= `X_COORD_WIDTH'd0;
-    y_counter <= `Y_COORD_WIDTH'd0;
+    x_counter <= `X_COORD_WIDTH'd0;//5
+    y_counter <= `Y_COORD_WIDTH'd0;//5
   end else if(buffer_rdy) begin
     if(x_counter < `X_COORD_MAX - 1) begin
       x_counter <= x_counter +`X_COORD_WIDTH'd1;
@@ -68,7 +68,7 @@ end // always
 // shift register to hold ready signal
 genvar i;
 generate
-for (i=0; i < `RDY_SHIFT_REG_SIZE-1; i=i+1) begin : shift_reg_loop
+  for (i=0; i < `RDY_SHIFT_REG_SIZE-1; i=i+1) begin : shift_reg_loop  //8
   always@(posedge clock) begin
     rdy_shift_reg[i] <= rdy_shift_reg[i+1];
   end // always
