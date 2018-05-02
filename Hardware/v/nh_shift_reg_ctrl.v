@@ -4,15 +4,15 @@ module nh_shift_reg_ctrl(
   input reset,
   
   input shift_in_rdy,
-  input [`NH_BITWIDTH:0] shift_in,
+  input [`NH_BITWIDTH:0] shift_in,  //23
   
   output dval,
-  output [(`NH_WIDTH*`NH_SIZE)-1:0] current_nh
+  output [(`NH_WIDTH*`NH_SIZE)-1:0] current_nh  //24,4
 );
 
 // wire declarations
-wire [`NH_BITWIDTH:0] shift_ins [`NH_DIM-1:0]; 
-wire [(`NH_SIZE*2)-1:0] reg_valid;
+  wire [`NH_BITWIDTH:0] shift_ins [`NH_DIM-1:0]; //23,2
+  wire [(`NH_SIZE*2)-1:0] reg_valid; //4
 
 // reg declarations
 reg [`NH_BITWIDTH:0] nh_reg [`NH_DIM-1:0][`NH_DIM-1:0];
