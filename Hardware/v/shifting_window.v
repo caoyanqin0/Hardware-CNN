@@ -12,15 +12,15 @@ module shifting_window(
   input reset,
   input shift_up, // shift all rows up
   input shift_left, // to load new pixel into bottom row
-  input [`CAMERA_PIXEL_BITWIDTH:0] pixel_in,
-  output [`BUFFER_OUT_VECTOR_BITWIDTH:0] buffer_out 
+ input [`CAMERA_PIXEL_BITWIDTH:0] pixel_in, //8
+ output [`BUFFER_OUT_VECTOR_BITWIDTH:0] buffer_out  //7055
 );
 
 // paremeters
 
 
 // wire declarations
-wire [`CAMERA_PIXEL_BITWIDTH:0] buffer_wire [`BUFFER_BW:0][`BUFFER_BH:0];
+ wire [`CAMERA_PIXEL_BITWIDTH:0] buffer_wire [`BUFFER_BW:0][`BUFFER_BH:0];//27,27
 
 // reg declarations
 
@@ -28,8 +28,8 @@ wire [`CAMERA_PIXEL_BITWIDTH:0] buffer_wire [`BUFFER_BW:0][`BUFFER_BH:0];
   genvar i;
   genvar j;
   generate
-    for(j=1;j < `BUFFER_H; j=j+1) begin : core_buffer_h_loop
-      for(i=0; i < `BUFFER_W; i=i+1) begin : core_buffer_w_loop
+   for(j=1;j < `BUFFER_H; j=j+1) begin : core_buffer_h_loop //28
+    for(i=0; i < `BUFFER_W; i=i+1) begin : core_buffer_w_loop //28
         buffer_unit unit_inst(
           .clock(clock),
           .reset(reset),
@@ -81,7 +81,7 @@ wire [`CAMERA_PIXEL_BITWIDTH:0] buffer_wire [`BUFFER_BW:0][`BUFFER_BH:0];
           ];
         */
        assign buffer_out[
-        (`CAMERA_PIXEL_WIDTH*m)+(`BUFFER_W*`CAMERA_PIXEL_WIDTH*n) +`CAMERA_PIXEL_BITWIDTH:
+        (`CAMERA_PIXEL_WIDTH*m)+(`BUFFER_W*`CAMERA_PIXEL_WIDTH*n) +`CAMERA_PIXEL_BITWIDTH: //9,28,9,27
           (`CAMERA_PIXEL_WIDTH*m)+(`BUFFER_W*`CAMERA_PIXEL_WIDTH*n)
           ] = buffer_wire[m][n];
       end // for m
