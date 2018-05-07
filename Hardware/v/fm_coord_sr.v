@@ -3,15 +3,15 @@ module fm_coord_sr (
   input clock,
   input reset,
   
-  input [`X_COORD_BITWIDTH:0] x_coord, // from mult adder ctrl
-  input [`Y_COORD_BITWIDTH:0] y_coord, // from mult adder ctrl
+  input [`X_COORD_BITWIDTH:0] x_coord, // from mult adder ctrl   4
+  input [`Y_COORD_BITWIDTH:0] y_coord, // from mult adder ctrl   4
   output [`X_COORD_BITWIDTH:0] fm_x_coord, // from mult adder ctrl
   output [`Y_COORD_BITWIDTH:0] fm_y_coord // from mult adder ctrl
 );
 
 // reg declarations
-reg [`X_COORD_BITWIDTH:0] xc [`FM_COORD_SR_DEPTH-1:0];
-reg [`Y_COORD_BITWIDTH:0] yc [`FM_COORD_SR_DEPTH-1:0];
+  reg [`X_COORD_BITWIDTH:0] xc [`FM_COORD_SR_DEPTH-1:0];  //4,8
+  reg [`Y_COORD_BITWIDTH:0] yc [`FM_COORD_SR_DEPTH-1:0];  //4,8
 
 
 // assign statments
@@ -22,7 +22,7 @@ assign fm_y_coord = yc[`FM_COORD_SR_DEPTH-1];
 // input to shift reg
 always@(posedge clock or negedge reset) begin
   if(reset == 1'b0) begin
-    xc[0] <= `X_COORD_WIDTH'd0;
+    xc[0] <= `X_COORD_WIDTH'd0;//5
     yc[0] <= `Y_COORD_WIDTH'd0;
   end else begin 
     xc[0] <= x_coord;
@@ -33,7 +33,7 @@ end // always
 // loop to build shift reg
 genvar i;
 generate
-for (i=0; i<`FM_COORD_SR_DEPTH-1; i=i+1) begin : coord_sr_gen
+for (i=0; i<`FM_COORD_SR_DEPTH-1; i=i+1) begin : coord_sr_gen  //8
   always@(posedge clock or negedge reset) begin 
     if(reset == 1'b0) begin
       xc[i+1] <= `X_COORD_WIDTH'd0;
