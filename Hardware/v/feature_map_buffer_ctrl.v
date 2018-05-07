@@ -4,10 +4,10 @@ module feature_map_buffer_ctrl(
   input reset,
   input data_rdy,
   
-  input [`X_COORD_BITWIDTH:0] xcoord,
-  input [`Y_COORD_BITWIDTH:0] ycoord, 
+  input [`X_COORD_BITWIDTH:0] xcoord,//4
+  input [`Y_COORD_BITWIDTH:0] ycoord, //4
 
-  output reg [`FM_ADDR_BITWIDTH:0] addr,
+  output reg [`FM_ADDR_BITWIDTH:0] addr,//6
   output reg buffer_full
 );
 
@@ -15,10 +15,10 @@ module feature_map_buffer_ctrl(
 //assign addr = xcoord + (ycoord * `FM_ADDR_WIDTH'd`FM_WIDTH);
 always@(posedge clock or negedge reset) begin
   if(reset == 1'b0) 
-    addr <= `FM_ADDR_WIDTH'd0;
+    addr <= `FM_ADDR_WIDTH'd0;//7
   else if (data_rdy)
     if(xcoord[0]&ycoord[0])
-	   addr <= addr + `FM_ADDR_WIDTH'd1;
+	   addr <= addr + `FM_ADDR_WIDTH'd1;//7
 	 else 
 	   addr <= addr;
   else
@@ -47,7 +47,7 @@ always@(posedge clock or negedge reset) begin
     buffer_full <= 1'b0;
   end else begin
 									// - 1 to adjust for 0 index
-    if (addr == `ADDR_MAX - 1) begin
+  if (addr == `ADDR_MAX - 1) begin //121
       buffer_full <= 1'b1;
     end else begin
       buffer_full <= 1'b0;
