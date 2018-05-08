@@ -4,9 +4,9 @@ module np_matrix_mult(
   input reset,
  
    
-  input [`FFN_IN_BITWIDTH:0] feature_pixel,
+  input [`FFN_IN_BITWIDTH:0] feature_pixel,//23
   input [`FFN_IN_BITWIDTH:0] weight,
-  input [`FFN_OUT_BITWIDTH:0] bias,
+  input [`FFN_OUT_BITWIDTH:0] bias,//57
   input en,
 //  input [`NUM_MM_BUFFER-1:0] frame_rdy, assume frame is ready
   //output reg [`NUM_MM_BUFFER-1:0] reading_frame, // a vector of boolean signals. one signal per frame/feature buffer
@@ -20,9 +20,9 @@ module np_matrix_mult(
 // parameter declaration
 
 // wire declaration
-wire [`FFN_OUT_BITWIDTH:0] sum_prelatch;
+wire [`FFN_OUT_BITWIDTH:0] sum_prelatch;//57
 //wire overflow_wire;
-wire [`FFN_IN_BITWIDTH:0] fp;
+wire [`FFN_IN_BITWIDTH:0] fp;//23
 wire [`FFN_IN_BITWIDTH:0] w;
 wire [`FFN_OUT_BITWIDTH:0] s;
 wire [`FFN_OUT_BITWIDTH:0] product;
@@ -32,9 +32,9 @@ reg [`FFN_OUT_BITWIDTH:0] sum;
 
 // assign statments
 // assign buf_addr = count;
-assign fp = en ? feature_pixel : `FFN_IN_WIDTH'd0;
+assign fp = en ? feature_pixel : `FFN_IN_WIDTH'd0;//24
 assign w = en ? weight : `FFN_IN_WIDTH'd0;
-assign s = en ? sum : `FFN_OUT_WIDTH'd0;
+assign s = en ? sum : `FFN_OUT_WIDTH'd0;//58
 assign sum_b = sum + bias;
 
 // instantiate multiplyer
